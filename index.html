@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gemini Summer 2026 Intern Program</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #f5f4f0;
+    color: #1a1a18;
+    min-height: 100vh;
+  }
+
+  .page-wrapper {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 48px 24px 64px;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+  .header h1 {
+    font-size: clamp(20px, 5vw, 28px);
+    font-weight: 700;
+    color: #1a1a18;
+    letter-spacing: -0.01em;
+  }
+  .header .subtitle {
+    font-size: 13px;
+    color: #73726c;
+    margin-top: 6px;
+  }
+
+  /* Program Manager card */
+  .grace-row {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 32px;
+  }
+  .grace-card {
+    background: #fff;
+    border: 1.5px solid #7F77DD;
+    border-radius: 12px;
+    padding: 14px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    transition: box-shadow .15s, transform .15s;
+  }
+  .grace-card:hover {
+    box-shadow: 0 4px 16px rgba(127,119,221,0.2);
+    transform: translateY(-1px);
+  }
+  .grace-card .name { font-size: 14px; font-weight: 600; color: #1a1a18; }
+  .grace-card .role { font-size: 11px; color: #7F77DD; margin-top: 3px; }
+
+  /* Legend */
+  .legend {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+    font-size: 11px;
+    color: #73726c;
+  }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .dot { width: 9px; height: 9px; border-radius: 2px; flex-shrink: 0; }
+  .dot.new    { background: #1D9E75; }
+  .dot.ret25  { background: #BA7517; }
+  .dot.ret26  { background: #185FA5; }
+
+  /* Team grid */
+  .teams-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+  }
+
+  .team-block {
+    background: #fff;
+    border: 1px solid #e0ddd5;
+    border-radius: 14px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Card header — label row + lead */
+  .card-header { display: flex; flex-direction: column; }
+
+  .card-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  .team-label {
+    font-size: 15px;
+    font-weight: 600;
+    color: #5f5e5a;
+    border-radius: 4px;
+    display: inline-block;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  /* Intern count pill — shown on mobile when collapsed */
+  .intern-count {
+    font-size: 10px;
+    font-weight: 500;
+    color: #73726c;
+    background: #f1efe8;
+    border-radius: 10px;
+    padding: 2px 7px;
+  }
+
+  /* Chevron — only visible on mobile */
+  .chevron {
+    display: none;
+    font-size: 14px;
+    color: #b4b2a9;
+    transition: transform .2s;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .lead-link { text-decoration: none; color: inherit; display: block; }
+  .lead-link:hover .lead-name { text-decoration: underline; }
+  .lead-name  { font-size: 13px; font-weight: 500; color: #1a1a18; line-height: 1.3; }
+  .lead-title { font-size: 11px; color: #73726c; margin-top: 2px; line-height: 1.4; }
+
+  /* Card body — intern list */
+  .card-body { margin-top: 10px; }
+
+  .divider { border: none; border-top: 1px solid #eceae2; margin: 0 0 10px; }
+
+  .intern-label {
+    font-size: 9px;
+    font-weight: 600;
+    color: #b4b2a9;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    margin-bottom: 8px;
+  }
+
+  .intern {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    margin-bottom: 6px;
+    font-size: 12px;
+  }
+  .intern:last-child { margin-bottom: 0; }
+  .intern a { color: #3a3935; text-decoration: none; line-height: 1.35; }
+  .intern a:hover { text-decoration: underline; color: #1a1a18; }
+
+  .badge {
+    font-size: 8px;
+    font-weight: 600;
+    padding: 2px 5px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    white-space: nowrap;
+    letter-spacing: 0.02em;
+  }
+  .badge.new   { background: #E1F5EE; color: #0F6E56; }
+  .badge.ret25 { background: #FAEEDA; color: #854F0B; }
+  .badge.ret26 { background: #E6F1FB; color: #185FA5; }
+
+  /* ── Mobile collapsible ── */
+  @media (max-width: 480px) {
+    .page-wrapper { padding: 32px 16px 48px; }
+    .teams-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+    .grace-card { padding: 12px 24px; }
+
+    .chevron { display: block; }
+
+    .card-header { cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent; }
+
+    /* Collapsed: hide body */
+    .card-body { display: none; }
+
+    /* Open state */
+    .team-block.is-open .card-body { display: block; }
+    .team-block.is-open .chevron { transform: rotate(180deg); }
+
+    /* Hide count when open */
+    .team-block.is-open .intern-count { display: none; }
+  }
+
+  @media (max-width: 340px) {
+    .teams-grid { grid-template-columns: 1fr; }
+  }
+
+  /* Dark mode */
+  @media (prefers-color-scheme: dark) {
+    body { background: #1c1c1a; color: #e8e6df; }
+    .header h1 { color: #e8e6df; }
+    .header .subtitle { color: #73726c; }
+    .grace-card { background: #2c2c2a; border-color: #7F77DD; }
+    .grace-card .name { color: #e8e6df; }
+    .team-block { background: #252523; border-color: #3a3a37; }
+    .team-label { color: #fff; }
+    .intern-count { background: #333330; color: #7a7974; }
+    .lead-name { color: #9e9c94; }
+    .lead-title { color: #9e9c94; }
+    .divider { border-color: #3a3a37; }
+    .intern a { color: #9e9c94; }
+    .intern a:hover { color: #e8e6df; }
+    .badge.new   { background: #085041; color: #9FE1CB; }
+    .badge.ret25 { background: #4a2a04; color: #FAC775; }
+    .badge.ret26 { background: #0C3A68; color: #B5D4F4; }
+    .dot.ret25   { background: #EF9F27; }
+    .dot.ret26   { background: #378ADD; }
+    .chevron { color: #5a5956; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-wrapper">
+
+  <div class="header">
+    <h1>Summer 2026 Intern Program</h1>
+    <p class="subtitle">Gemini &mdash; Engineering &amp; Data</p>
+  </div>
+
+  <div class="grace-row">
+    <a class="grace-card" href="https://www.linkedin.com/in/gracegarbolinoreginato/" target="_blank">
+      <div class="name">Grace Reginato</div>
+      <div class="role">Lead Program Manager, Emerging Talent</div>
+    </a>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="dot new"></div> New intern</div>
+    <div class="legend-item"><div class="dot ret25"></div> Returning — Summer 2025</div>
+    <div class="legend-item"><div class="dot ret26"></div> Returning — Winter 2026</div>
+  </div>
+
+  <div class="teams-grid">
+
+    <!-- Data -->
+    <div class="team-block">
+      <div class="card-header">
+        <div class="card-header-row">
+          <span class="team-label">Data</span>
+          <span class="intern-count">5</span>
+          <span class="chevron">&#8964;</span>
+        </div>
+        <a class="lead-link" href="https://www.linkedin.com/in/ericjeske/" target="_blank">
+          <div class="lead-name">Eric Jeske</div>
+          <div class="lead-title">Head of Data</div>
+        </a>
+      </div>
+      <div class="card-body">
+        <hr class="divider">
+        <div class="intern-label">Interns</div>
+        <div class="intern"><span class="badge new">New</span><a href="https://www.linkedin.com/in/amallepalli685/" target="_blank">Aditya Mallepalli</a></div>
+        <div class="intern"><span class="badge ret25">↩ S'25</span><a href="https://www.linkedin.com/in/ac2923/" target="_blank">Andrei Codreanu</a></div>
+        <div class="intern"><span class="badge new">New</span><a href="https://www.linkedin.com/in/aarya-upadhyay-au/" target="_blank">Aarya Upadhyay</a></div>
+        <div class="intern"><span class="badge ret26">↩ W'26</span><a href="https://www.linkedin.com/in/elvis-li03/" target="_blank">Elvis Li</a></div>
+        <div class="intern"><span class="badge ret26">↩ W'26</span><a href="https://www.linkedin.com/in/samliofficial/" target="_blank">Sam Li</a></div>
+      </div>
+    </div>
+
+    <!-- Identity -->
+    <div class="team-block">
+      <div class="card-header">
+        <div class="card-header-row">
+          <span class="team-label">Identity</span>
+          <span class="intern-count">2</span>
+          <span class="chevron">&#8964;</span>
+        </div>
+        <a class="lead-link" href="https://www.linkedin.com/in/tom-mcdaniel-8492406/" target="_blank">
+          <div class="lead-name">Tom McDaniel</div>
+          <div class="lead-title">Senior Principal Engineer</div>
+        </a>
+      </div>
+      <div class="card-body">
+        <hr class="divider">
+        <div class="intern-label">Interns</div>
+        <div class="intern"><span class="badge ret26">↩ W'26</span><a href="https://www.linkedin.com/in/kumar-laksh/" target="_blank">Laksh Kumar</a></div>
+        <div class="intern"><span class="badge new">New</span><a href="https://www.linkedin.com/in/manasvi-meka-80221327a/" target="_blank">Manasvi Meka</a></div>
+      </div>
+    </div>
+
+    <!-- Automation -->
+    <div class="team-block">
+      <div class="card-header">
+        <div class="card-header-row">
+          <span class="team-label">Automation</span>
+          <span class="intern-count">2</span>
+          <span class="chevron">&#8964;</span>
+        </div>
+        <a class="lead-link" href="https://www.linkedin.com/in/tom-mcdaniel-8492406/" target="_blank">
+          <div class="lead-name">Tom McDaniel</div>
+          <div class="lead-title">Senior Principal Engineer</div>
+        </a>
+      </div>
+      <div class="card-body">
+        <hr class="divider">
+        <div class="intern-label">Interns</div>
+        <div class="intern"><span class="badge ret25">↩ S'25</span><a href="https://www.linkedin.com/in/williamsanz/" target="_blank">Will Sanz</a></div>
+        <div class="intern"><span class="badge new">New</span><a href="https://www.linkedin.com/in/aryan-vemuri-26b27a1a5/" target="_blank">Aryan Vemuri</a></div>
+      </div>
+    </div>
+
+    <!-- Tooling -->
+    <div class="team-block">
+      <div class="card-header">
+        <div class="card-header-row">
+          <span class="team-label">Tooling</span>
+          <span class="intern-count">3</span>
+          <span class="chevron">&#8964;</span>
+        </div>
+        <a class="lead-link" href="https://www.linkedin.com/in/tom-mcdaniel-8492406/" target="_blank">
+          <div class="lead-name">Tom McDaniel</div>
+          <div class="lead-title">Senior Principal Engineer</div>
+        </a>
+      </div>
+      <div class="card-body">
+        <hr class="divider">
+        <div class="intern-label">Interns</div>
+        <div class="intern"><span class="badge new">New</span><a href="https://www.linkedin.com/in/krista-semaan/" target="_blank">Krista Semaan</a></div>
+        <div class="intern"><span class="badge new">New</span><a href="https://www.linkedin.com/in/victoriajhuang/" target="_blank">Victoria Huang</a></div>
+        <div class="intern"><span class="badge new">New</span><a href="https://www.linkedin.com/in/hhenryyangg/" target="_blank">Henry Yang</a></div>
+      </div>
+    </div>
+
+    <!-- Risk -->
+    <div class="team-block">
+      <div class="card-header">
+        <div class="card-header-row">
+          <span class="team-label">Risk</span>
+          <span class="intern-count">2</span>
+          <span class="chevron">&#8964;</span>
+        </div>
+        <a class="lead-link" href="https://www.linkedin.com/in/tom-mcdaniel-8492406/" target="_blank">
+          <div class="lead-name">Tom McDaniel</div>
+          <div class="lead-title">Senior Principal Engineer</div>
+        </a>
+      </div>
+      <div class="card-body">
+        <hr class="divider">
+        <div class="intern-label">Interns</div>
+        <div class="intern"><span class="badge new">New</span><a href="https://www.linkedin.com/in/vamshi-pagidi/" target="_blank">Vamshi Pagidi</a></div>
+        <div class="intern"><span class="badge new">New</span><a href="https://www.linkedin.com/in/rick-peng/" target="_blank">Rick Peng</a></div>
+      </div>
+    </div>
+
+    <!-- Predictions -->
+    <div class="team-block">
+      <div class="card-header">
+        <div class="card-header-row">
+          <span class="team-label">Predictions</span>
+          <span class="intern-count">5</span>
+          <span class="chevron">&#8964;</span>
+        </div>
+        <a class="lead-link" href="https://www.linkedin.com/in/ajfuller/" target="_blank">
+          <div class="lead-name">Andrew Fuller</div>
+          <div class="lead-title">Director, Engineering</div>
+        </a>
+      </div>
+      <div class="card-body">
+        <hr class="divider">
+        <div class="intern-label">Interns</div>
+        <div class="intern"><span class="badge new">New</span><a href="https://www.linkedin.com/in/garv-tayade/" target="_blank">Garv Tayade</a></div>
+        <div class="intern"><span class="badge new">New</span><a href="https://www.linkedin.com/in/shivam-kumar-ent/" target="_blank">Shivam Kumar</a></div>
+        <div class="intern"><span class="badge new">New</span><a href="https://www.linkedin.com/in/havishpallerla/" target="_blank">Havish Pallerla</a></div>
+        <div class="intern"><span class="badge new">New</span><a href="https://www.linkedin.com/in/nsigel/" target="_blank">Noah Signel</a></div>
+        <div class="intern"><span class="badge new">New</span><a href="https://www.linkedin.com/in/eli-dubizh/" target="_blank">Eli Dubizh</a></div>
+      </div>
+    </div>
+
+    <!-- Trading -->
+    <div class="team-block">
+      <div class="card-header">
+        <div class="card-header-row">
+          <span class="team-label">Trading</span>
+          <span class="intern-count">4</span>
+          <span class="chevron">&#8964;</span>
+        </div>
+        <a class="lead-link" href="https://www.linkedin.com/in/debasishbera/" target="_blank">
+          <div class="lead-name">Debasish Bera</div>
+          <div class="lead-title">Director, Advanced Trading</div>
+        </a>
+      </div>
+      <div class="card-body">
+        <hr class="divider">
+        <div class="intern-label">Interns</div>
+        <div class="intern"><span class="badge ret25">↩ S'25</span><a href="https://www.linkedin.com/in/justin-yoo17/" target="_blank">Justin Yoo</a></div>
+        <div class="intern"><span class="badge ret25">↩ S'25</span><a href="https://www.linkedin.com/in/julian-saadon/" target="_blank">Julian Saadon</a></div>
+        <div class="intern"><span class="badge new">New</span><a href="https://www.linkedin.com/in/dev-variath-menon-8062b0313/" target="_blank">Dev Menon</a></div>
+        <div class="intern"><span class="badge ret26">↩ W'26</span><a href="https://www.linkedin.com/in/joseph-modine/" target="_blank">Joseph Modine</a></div>
+      </div>
+    </div>
+
+    <!-- Onchain -->
+    <div class="team-block">
+      <div class="card-header">
+        <div class="card-header-row">
+          <span class="team-label">Onchain</span>
+          <span class="intern-count">8</span>
+          <span class="chevron">&#8964;</span>
+        </div>
+        <a class="lead-link" href="https://www.linkedin.com/in/erickuhn19/" target="_blank">
+          <div class="lead-name">Eric Kuhn</div>
+          <div class="lead-title">Head of Onchain</div>
+        </a>
+      </div>
+      <div class="card-body">
+        <hr class="divider">
+        <div class="intern-label">Interns</div>
+        <div class="intern"><span class="badge ret26">↩ W'26</span><a href="https://www.linkedin.com/in/ignaspanavas/" target="_blank">Ignas Panavas</a></div>
+        <div class="intern"><span class="badge ret26">↩ W'26</span><a href="https://www.linkedin.com/in/yash-bapat-4810a4251/" target="_blank">Yash Bapat</a></div>
+        <div class="intern"><span class="badge new">New</span><a href="https://www.linkedin.com/in/nischay-rawal/" target="_blank">Nischay Rawal</a></div>
+        <div class="intern"><span class="badge ret25">↩ S'25</span><a href="https://www.linkedin.com/in/vpalmerio/" target="_blank">Vincent Palmerio</a></div>
+        <div class="intern"><span class="badge new">New</span><a href="https://www.linkedin.com/in/brockbenton/" target="_blank">Brock Benton</a></div>
+        <div class="intern"><span class="badge ret26">↩ W'26</span><a href="https://www.linkedin.com/in/pranav-doshi-60a647213/" target="_blank">Pranav Doshi</a></div>
+        <div class="intern"><span class="badge new">New</span><a href="https://www.linkedin.com/in/juliuszhou124/" target="_blank">Julius Zhou</a></div>
+        <div class="intern"><span class="badge new">New</span><a href="https://www.linkedin.com/in/shriyaabalaji/" target="_blank">Shriyaa Balaji</a></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  (function () {
+    var MOBILE_BP = 480;
+
+    function isMobile() { return window.innerWidth <= MOBILE_BP; }
+
+    document.querySelectorAll('.team-block').forEach(function (block) {
+      var header = block.querySelector('.card-header');
+      header.addEventListener('click', function (e) {
+        if (!isMobile()) return;
+        // Let link clicks through without toggling
+        if (e.target.closest('a')) return;
+        block.classList.toggle('is-open');
+      });
+    });
+
+    // When resizing to desktop, remove collapsed state so cards show fully
+    window.addEventListener('resize', function () {
+      if (!isMobile()) {
+        document.querySelectorAll('.team-block').forEach(function (b) {
+          b.classList.remove('is-open');
+        });
+      }
+    });
+  })();
+</script>
+
+</body>
+</html>
